@@ -4,6 +4,8 @@ import argparse as ap
 import numpy
 import sys
 import math 
+import os
+import time
 
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
@@ -200,7 +202,6 @@ def fileprint(input=""):
     output.write(input)
     output.write("\n")
 
-import time
 def main():
     parser = ap.ArgumentParser(prog="Sprite Image Encoder", description='Convert an image into 16 bit sprite data with metadata')
     parser.add_argument("input_path", help='Input file path')
@@ -210,7 +211,6 @@ def main():
 
     start_time = time.time()
 
-    print(args.input_path)
     (im, width, height) = get_image(args.input_path)
 
     global output
@@ -219,7 +219,7 @@ def main():
     format_c(args.name, im, fileprint)
 
     end_time = time.time()
-    print(f"{(end_time-start_time)*1000:.0f}ms")
+    print(f"{os.path.basename(args.input_path)}: {(end_time-start_time)*1000:.0f}ms")
 
 if __name__ == "__main__":
     main()

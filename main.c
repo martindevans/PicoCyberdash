@@ -36,8 +36,7 @@
 #include "sprite/scanline_rendering.h"
 
 #include "content/SaikyoBlack.h"
-#include "content/skyline_a.h"
-#include "content/skyline_b.h"
+#include "content/sprites.h"
 
 #include "hardware/structs/vreg_and_chip_reset.h"
 
