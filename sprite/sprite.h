@@ -39,6 +39,15 @@ typedef struct {
 } sprite_t;
 
 typedef struct {
+    int16_t x;
+    int16_t y;
+    int8_t frame_index;
+    int8_t frame_life;
+    image_data_t *frames;
+    int8_t *frame_durations;
+} anim_sprite_t;
+
+typedef struct {
     uint16_t left;
     const uint16_t *first_pixel;
     uint16_t count;

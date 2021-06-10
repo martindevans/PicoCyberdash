@@ -48,25 +48,28 @@ static const uint VSYNC_PIN = PICO_SCANVIDEO_COLOR_PIN_BASE + PICO_SCANVIDEO_COL
 static const uint button_pins[] = {0, 6, 11};
 static uint32_t button_state = 0;
 
-static sprite_t bg0 = {
-    .x = 0,
-    .y = 0,
-    .data = &skyline_a_256x380
-};
-static sprite_t bg1 = {
-    .x = 256,
-    .y = 0,
-    .data = &skyline_a_256x380
-};
-static sprite_t bg2 = {
-    .x = 512,
-    .y = 0,
-    .data = &skyline_b_256x380
-};
-static sprite_t bg3 = {
-    .x = 768,
-    .y = 0,
-    .data = &skyline_a_256x380
+#define BG_COUNT 4
+static sprite_t background[BG_COUNT] = {
+    {
+        .x = 0,
+        .y = 0,
+        .data = &skyline_a_256x380
+    },
+    {
+        .x = 256,
+        .y = 0,
+        .data = &skyline_a_256x380
+    },
+    {
+        .x = 512,
+        .y = 0,
+        .data = &skyline_b_256x380
+    },
+    {
+        .x = 768,
+        .y = 0,
+        .data = &skyline_a_256x380
+    }
 };
 
 void __time_critical_func(render_scanline)(struct scanvideo_scanline_buffer *dest, int dma_channel) {
@@ -78,10 +81,9 @@ void __time_critical_func(render_scanline)(struct scanvideo_scanline_buffer *des
     sprite_fill16_dma(colour_buf, bgcol, 0, VGA_MODE.width, dma_channel);
 
     // Draw the BG sprites
-    sprite_sprite16_dma(colour_buf, &bg0, l, VGA_MODE.width, dma_channel);
-    sprite_sprite16_dma(colour_buf, &bg1, l, VGA_MODE.width, dma_channel);
-    sprite_sprite16_dma(colour_buf, &bg2, l, VGA_MODE.width, dma_channel);
-    sprite_sprite16_dma(colour_buf, &bg3, l, VGA_MODE.width, dma_channel);
+    for (size_t i = 0; i < BG_COUNT; i++) {
+        sprite_sprite16_dma(colour_buf, &background[i], l, VGA_MODE.width, dma_channel);
+    }
 
     // Draw debug string
     if (debug_str_length > 0) {
@@ -146,22 +148,11 @@ void __time_critical_func(frame_update_logic)(uint32_t frame_number) {
     // shift bg
     if (frame_number & 3)
     {
-        bg0.x--;
-        bg1.x--;
-        bg2.x--;
-        bg3.x--;
-
-        if (bg0.x == -256) {
-            bg0.x+=1024;
-        }
-        if (bg1.x == -256) {
-            bg1.x+=1024;
-        }
-        if (bg2.x == -256) {
-            bg2.x+=1024;
-        }
-        if (bg3.x == -256) {
-            bg3.x+=1024;
+        for (size_t i = 0; i < BG_COUNT; i++) {
+            background[i].x--;
+            if (background[i].x == -256) {
+                background[i].x += (BG_COUNT * 256);
+            }
         }
     }
 
