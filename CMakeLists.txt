@@ -30,6 +30,7 @@ target_link_libraries(cyberdash
     sprite
     tinyusb_host
     tinyusb_board
+    pico_sd_card
 )
 
 target_compile_definitions(cyberdash PRIVATE

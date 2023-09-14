@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "pico/sd_card.h"
 #include "pico.h"
 #include "pico/error.h"
 #include "hardware/uart.h"
